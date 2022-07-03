@@ -21,8 +21,6 @@ export function Home() {
   const viewModel: IHomeViewModel = new HomeViewModel()
 
   useEffect(() => {
-    viewModel
-      .handleBarCodeScanned({ test: '' }, isScanned => setScanned(isScanned), didBarCodeScanned, didFailureGetProducts)
     bind()
   }, []);
 
