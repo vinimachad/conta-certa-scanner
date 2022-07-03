@@ -1,19 +1,17 @@
 import { BarCodeScanner, PermissionStatus } from 'expo-barcode-scanner';
-import { CosmosProduct } from '../../models/CosmosProduct';
 import { Product } from '../../models/Product';
 import { api } from '../../services/api';
-import { cosmosApi } from '../../services/cosmosApi';
 
 export interface IHomeViewModel {
     requestCameraPermission(): Promise<PermissionStatus>
     hasPermissionToShowCamera(hasPermission: boolean, hasntPermissionCompletion: () => void)
-    handleBarCodeScanned(data: any, onScanned: (isScanned: boolean) => void, success: (product: CosmosProduct) => void, failure: (message: string) => void)
+    handleBarCodeScanned(data: any, onScanned: (isScanned: boolean) => void, success: (product: Product) => void, failure: (message: string) => void)
     createProductRequest(data: Product): Promise<void>
 }
 
 export class HomeViewModel implements IHomeViewModel {
 
-    private cosmosProduct?: CosmosProduct
+    private product?: Product
 
     async requestCameraPermission(): Promise<PermissionStatus> {
         const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -28,12 +26,12 @@ export class HomeViewModel implements IHomeViewModel {
         }
     }
 
-    async handleBarCodeScanned({ data }: any, onScanned: (isScanned: boolean) => void, success: (product: CosmosProduct) => void, failure: (message: string) => void) {
+    async handleBarCodeScanned({ data }: any, onScanned: (isScanned: boolean) => void, success: (product: Product) => void, failure: (message: string) => void) {
         onScanned(true)
         try {
-            let res = await cosmosApi.get(`/gtins/${data}`)
-            this.cosmosProduct = res.data
-            success(this.cosmosProduct);
+            let res = await api.get(`/products/${data}`)
+            this.product = res.data
+            success(this.product);
         } catch (error) {
             failure(error)
         }

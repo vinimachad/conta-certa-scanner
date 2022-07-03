@@ -1,5 +1,5 @@
-import { Home } from './src/screens/Home';
+import { NavigationFlow } from './src/routes';
 
 export default function App() {
-  return <Home />
+  return <NavigationFlow />
 }
